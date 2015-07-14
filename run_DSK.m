@@ -14,7 +14,7 @@ load('example_data.mat','train_data','train_label','test_data','test_label');
 %% parameter settings
 %original Stein kernel
 opt.theta = 1; % a parameter in Stein kernel
-opt.obj_method = 'ka'; % use kernel alignment criterion
+opt.obj_method = 'ka'; % use kernel alignment criterion or 'cs' to use class seperabiliy criterion.
 opt.original_alpha = 1; % set to 1 to use original Stein kernel or 0 to use DSK
 [test_kernel,train_kernel] = DSK_optimization(train_data,train_label,test_data,opt); % do DSK adjustment
 [accu_SK] = kernel_knn_classification(test_kernel,train_label,K,test_label); % do knn classification
