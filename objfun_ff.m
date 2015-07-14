@@ -42,6 +42,30 @@ if(strcmp(method,'ka')) % compute the objective with kernel alignment criterion
     k00 = sum(sum(K0 .* K0));
     kkk = sum(sum(K .* K));
     obj = -ka/sqrt((k00*kkk)) + lambda*norm(alpha - initial_alpha);
-    return;
+elseif(strcmp(method,'cs')) % compute the objective with class seperabiliy criterion
+obj = -class_seperabiliy(K,y) + lambda*norm(alpha - initial_alpha);
 end
+end
+
+
+
+function cs = class_seperabiliy(K,label)
+n = size(K,1);
+ulabel = unique(label);
+nlabel = length(ulabel);
+
+for ilabel = 1:nlabel
+    ni(ilabel) = sum(label == ulabel(ilabel));
+end
+SB = 0;
+SW = 0;
+ST = 0;
+for ilabel = 1:nlabel
+    Ki = K(label==ulabel(ilabel),label==ulabel(ilabel));
+    SB = SB + sum(Ki(:))/ni(ilabel);
+end
+SW = trace(K) - SB;
+SB = SB - sum(K(:))/n;
+ST = SW + SB;
+cs = SB/ST;
 end
